@@ -12,8 +12,12 @@ var motion = Vector2.ZERO
 
 onready var sprite = $Sprite
 onready var animation_player = $AnimationPlayer
+onready var screen_size = get_viewport_rect().size
 
 func _physics_process(delta: float) -> void:
+	if Input.is_action_pressed('reload'):
+		restart_game()
+	
 	var x_input = Input.get_action_strength('ui_right') - Input.get_action_strength('ui_left')
 	
 	if x_input != 0:
@@ -40,4 +44,9 @@ func _physics_process(delta: float) -> void:
 	
 	motion.y += GRAVITY * delta
 	
+	position.x = wrapf(position.x, 0, screen_size.x)
+	
 	motion = move_and_slide(motion, Vector2.UP)
+
+func restart_game():
+	get_tree().reload_current_scene()
